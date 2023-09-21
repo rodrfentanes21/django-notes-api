@@ -34,6 +34,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     """Database model for user, containing attributes (id, name, email, password)"""
     # this class does not explicitally declares the id attribute because i will be using the Django's base id.
     email = models.EmailField(max_length=255, unique=True)
+    user_id = id
     name = models.CharField(max_length=255)
     is_staff = models.BooleanField(default=False)
 
@@ -53,7 +54,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
 class NoteManager(models.Manager):
 
-    def create(self, user_id, title, body):
+    def create(self, title, body, user_id=None):
         """Create a new note with the specified user ID, title, and body."""
         note = self.model(
             user_id=user_id,
@@ -73,9 +74,9 @@ class NoteManager(models.Manager):
 
 class Note(models.Model):
     """Database model for user, containing attributes (id, user_id, title, body, created_at, updated_at)"""
-    user_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, default=None)
     title = models.CharField(max_length=255)
     body = models.CharField(max_length=1000)
+    user_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, default=None, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

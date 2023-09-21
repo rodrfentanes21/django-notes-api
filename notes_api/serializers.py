@@ -33,3 +33,21 @@ class UserProfileSerializer(serializers.ModelSerializer):
             instance.set_password(password)
 
         return super().update(instance, validated_data)
+    
+
+class NotesSerializer(serializers.ModelSerializer):
+    """Serializes a note object"""
+
+    class Meta:
+        model = models.Note
+        fields =('id', 'user_id', 'title', 'body', 'created_at', 'updated_at')
+
+    def create(self, validated_data):
+        """Create and return a new note"""
+        user = models.Note.objects.create(
+            title=validated_data['title'],
+            body=validated_data['body'],
+        )
+
+        return user
+    
