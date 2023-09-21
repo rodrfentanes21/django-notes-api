@@ -24,6 +24,7 @@ class UserProfileManager(BaseUserManager):
         """Create and save new superuser"""
         user = self.create_user(email, name, password)
 
+        user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
 
@@ -34,6 +35,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     # this class does not explicitally declares the id attribute because i will be using the Django's base id.
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
+    is_staff = models.BooleanField(default=False)
 
     objects = UserProfileManager()
 
