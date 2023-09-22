@@ -21,7 +21,7 @@ class UserApiViewRoutes(APIView):
 class NotesApiViewRoutes(APIView):
     """Note related routes that use API View (document what routes belong here later)"""
 
-    allowed_methods = ['GET', 'POST']
+    allowed_methods = ['GET', 'POST', 'PATCH']
 
     def get(self, request, format=None):
         """Return a list of all Users"""
@@ -38,3 +38,25 @@ class NotesApiViewRoutes(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def patch(self, request, format=None):
+        """Update an existing note"""
+        note_id = request.data.get('id')
+        note = models.Note.objects.get(id=note_id)
+
+        title = request.data.get('title')
+        body = request.data.get('body')
+
+        if title is not None:
+            note.title = title
+        if body is not None:
+            note.body = body
+
+        note.save()
+
+        serializer = serializers.NotesSerializer(note, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
