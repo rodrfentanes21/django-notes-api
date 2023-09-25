@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-ijmma6d^nsx65k7!&s_xvz!m+9^8jw6!kkpb$*_zs#e#*y!c04
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -55,6 +55,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
 
 ROOT_URLCONF = 'notes_project.urls'
 
