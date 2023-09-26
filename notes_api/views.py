@@ -21,7 +21,7 @@ class UserApiViewRoutes(APIView):
 class NotesApiViewRoutes(APIView):
     """Note related routes that use API View (document what routes belong here later)"""
 
-    allowed_methods = ['GET', 'POST', 'PATCH']
+    allowed_methods = ['GET', 'POST', 'PATCH', 'DELETE']
 
     def get(self, request, format=None):
         """Return a list of all Users"""
@@ -59,4 +59,13 @@ class NotesApiViewRoutes(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, format=None):
+        """Delete an existing note"""
+        note_id = request.data.get('id')
+        note = models.Note.objects.get(id=note_id)
+
+        note.delete()
+
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
         
